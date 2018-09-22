@@ -1,0 +1,20 @@
+/* Defaults
+----------------------------------------------*/
+
+/* Typographical Elements
+--------------------------------------------- */
+
+/* Chrome fix */
+body > div {
+	font-size: $body--font-size;
+}
+
+body {
+	margin: 0;
+	color: $body--font-color;
+	background-color: $body--background-color;
+	font-family: $body--font-family;
+	font-size: $body--font-size;
+	font-weight: $font-weight--regular;
+	line-height: $line-height--normal;
+}
