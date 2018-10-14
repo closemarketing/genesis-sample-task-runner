@@ -21,10 +21,10 @@ const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
+const imagemin = require('gulp-imagemin');
 
 // Project specific variables - CHANGE THESE
-const siteName = 'genesis-sample.test'; // set your siteName here
-const userName = 'sridharkatakam'; // set your Mac OS userName here
+const siteName = 'website.loc'; // set your siteName here
 
 /**
  * Error handling
@@ -100,6 +100,89 @@ gulp.task('postcss', () => {
 
 		// Inject CSS into Browser.
 		.pipe(browserSync.stream());
+
+	// Gutenberg
+	gulp
+		.src('./sass/style-editor.scss')
+
+		// Error handling.
+		.pipe(
+			plumber({
+				errorHandler: handleErrors
+			})
+		)
+
+		// Sass magic.
+		.pipe(
+			sass({
+				errLogToConsole: true,
+				outputStyle: 'expanded' // Options: nested, expanded, compact, compressed
+			})
+		)
+
+		// Pixel fallbacks for rem units.
+		.pipe(pixrem())
+
+		// PostCSS magic.
+		.pipe(
+			postcss([
+				autoprefixer(),
+				mqpacker({
+					sort: true
+				})
+			])
+		)
+
+		// Write the CSS file.
+		.pipe(gulp.dest('./'))
+
+	gulp
+		.src('./sass/style.scss')
+
+		// Error handling.
+		.pipe(
+			plumber({
+				errorHandler: handleErrors
+			})
+		)
+
+		// Wrap tasks in a sourcemap.
+		.pipe(sourcemaps.init())
+
+		// Sass magic.
+		.pipe(
+			sass({
+				errLogToConsole: true,
+				outputStyle: 'expanded' // Options: nested, expanded, compact, compressed
+			})
+		)
+
+		// Pixel fallbacks for rem units.
+		.pipe(pixrem())
+
+		// PostCSS magic.
+		.pipe(
+			postcss([
+				autoprefixer(),
+				mqpacker({
+					sort: true
+				})
+			])
+		)
+
+		// Create the source map.
+		.pipe(
+			sourcemaps.write('./', {
+				includeContent: false
+			})
+		)
+
+		// Write the CSS file.
+		.pipe(gulp.dest('./'))
+
+		// Inject CSS into Browser.
+		.pipe(browserSync.stream());
+	
 });
 
 /**
@@ -145,12 +228,6 @@ gulp.task('css:minify', ['postcss'], () => {
 
 		// Inject the CSS into the browser.
 		.pipe(browserSync.stream())
-
-		.pipe(
-			notify({
-				message: 'Styles are built.'
-			})
-		);
 });
 
 /*******************
@@ -189,12 +266,6 @@ gulp.task('js', () => {
 				stream: true
 			})
 		)
-
-		.pipe(
-			notify({
-				message: 'Scripts are minified.'
-			})
-		);
 });
 
 /**********************
@@ -208,14 +279,10 @@ gulp.task('js', () => {
  */
 gulp.task('watch', () => {
 	browserSync.init({
-		proxy: `https://${siteName}`,
+		proxy: `http://${siteName}`,
 		host: siteName,
 		open: 'external',
-		port: 8000,
-		https: {
-			key: `/Users/${userName}/.valet/Certificates/${siteName}.key`,
-			cert: `/Users/${userName}/.valet/Certificates/${siteName}.crt`
-		}
+		port: 8000
 	});
 
 	// Watch Scss files. Changes are injected into the browser from within the task.
@@ -243,3 +310,9 @@ gulp.task('scripts', ['js']);
 gulp.task('default', ['watch'], () => {
 	gulp.start('styles', 'scripts');
 });
+
+gulp.task('images', () =>
+    gulp.src('./images/*')
+        .pipe(imagemin())
+        .pipe(gulp.dest('dist/images'))
+);

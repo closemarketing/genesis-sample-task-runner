@@ -1,13 +1,12 @@
 {
-	"name": "genesis-sample-task-runner",
+	"name": "closemarketing-task-runner",
 	"version": "1.0.0",
-	"description":
-		"Sass compiling, Auto prefixing, CSS minfification, automatic browser reloading and more using Gulp and BrowserSync",
+	"description": "Sass compiling, Auto prefixing, CSS minfification, automatic browser reloading and more using Gulp and BrowserSync",
 	"main": "gulpfile.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Sridhar Katakam",
+	"author": "closemarketing",
 	"license": "GPL-2.0",
 	"browserslist": [
 		"> 1%",
@@ -28,6 +27,7 @@
 		"gulp-autoprefixer": "^5.0.0",
 		"gulp-clean-css": "^3.9.4",
 		"gulp-cssnano": "^2.1.3",
+		"gulp-imagemin": "^4.1.0",
 		"gulp-minify": "^2.1.0",
 		"gulp-notify": "^3.2.0",
 		"gulp-pixrem": "^1.0.0",
